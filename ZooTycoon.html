@@ -1,0 +1,421 @@
+<html>
+<head>
+    <title>Keeping up with Zoo Tycoon</title>
+    <script>function gameLoop() {
+
+    }
+
+    // Virtual Pet Stats and starting values
+        /* var petName = "Lassie";
+         var currentHealth = 60;
+         var maxHealth = 100;
+         var petStatus = "Healthy";
+         var meSleepy = 60;
+         var maxSleep = 100;
+         var feedMe = 60;
+         var maxFeed = 100; */
+        var petStatus = "Healthy";
+        var accountBalance = 100000;
+        var lions = [];
+        var bears = [];
+        var dogs =[];
+        var tigers =[];
+        var humans = [];
+
+        class Animal {
+            constructor(name, health, tiredness, profit, cost) {
+                this.health = health;
+                this.tiredness = tiredness;
+                this.profit = profit;
+                this.animalName = name;
+                this.cost = cost;
+                this.death = false;
+                accountBalance-=this.cost;
+            }
+            get animalName() {
+                return this.animalName;
+            }
+            set animalName(x) {
+                this.animalName = x;
+            }
+            get health() {
+                return this.health;
+            }
+           set health(x) {
+               this.health = x;
+            }
+            get tiredness() {
+                return this.tiredness;
+            }
+            set tiredness(x) {
+                this.tiredness = x;
+            }
+            get profit() {
+                return this.profit;
+            }
+            set profit(x) {
+                this.profit = x;
+            }
+            get cost() {
+                return this.cost;
+            }
+            set cost(x) {
+                this.cost = x;
+            }
+            get death() {
+                return this.death;
+            }
+            set death(x) {
+                this.death = 'false';
+            }
+            looseHealth(){
+                this.health-=1;
+                if(this.health<=0){
+                    this.health=0;
+                }
+            }
+            gainTiredness(){
+                this.tiredness+=1;
+                if(this.tiredness>=100){
+                    this.tiredness=100;
+                }
+            }
+            addProfit(){
+                accountBalance+=this.profit;
+
+
+            }
+        }
+
+
+        // Subclass of Animal
+        class Lion extends Animal {
+            constructor(name) {
+                super(name, 100, 0, .5, 20000);
+            }
+            looseHealth(){
+                this.health-=1.5;
+                if(this.health<=0){
+                    this.health=0;
+                }
+            }
+            gainTiredness(){
+                this.tiredness+=5;
+                if(this.tiredness>=100){
+                    this.tiredness=100;
+                }
+            }
+            roar(){
+                this.tiredness+=50;
+                this.profit+=1;
+                document.writeln(this.Name + " the Lion does a big roar.");
+            }
+        }
+
+        alex = new Lion ("Alex");
+        alex.roar ();
+
+        class Dog extends Animal {
+            constructor (name) {
+                super(name, 100, 0, .5, 1000);
+            }
+            looseHealth(){
+                this.health-=.5;
+                if(this.health<=0){
+                    this.health=0;
+                }
+            }
+            gainTiredness(){
+                this.tiredness+=2;
+                if(this.tiredness>=100){
+                    this.tiredness=100;
+                }
+            }
+            bark(){
+                this.tiredness+=20;
+                this.profit+=.5;
+                document.writeln(this.Name + "the dog barks loudly.");
+            }
+        }
+
+        lassie = new Dog ("Lassie");
+        lassie.bark ();
+
+        class Bear extends Animal {
+            constructor(name) {
+                super(name, 100, 0, 1, 20000);
+            }
+
+            looseHealth() {
+                this.health -= 1;
+                if (this.health <= 0) {
+                    this.health = 0;
+                }
+            }
+
+            gainTiredness() {
+                this.tiredness += 1;
+                if (this.tiredness >= 100) {
+                    this.tiredness = 100;
+                }
+            }
+
+            jamboree() {
+                    this.tiredness += 80;
+                this.profit += 1000;
+                this.health -= 50;
+                document.writeln(this.Name + "starts a Jamboree!");
+            }
+        }
+
+        var bear = new Bear ("Yogi");
+        bear.jamboree();
+
+        class Tiger extends Animal {
+            constructor(name) {
+                super(name, 100, 0, .5, 10000);
+            }
+            looseHealth(){
+                this.health-=1;
+                if(this.health<=0){
+                    this.health=0;
+                }
+            }
+            gainTiredness(){
+                this.tiredness+=1;
+                if(this.tiredness>=100){
+                    this.tiredness=100;
+                }
+            }
+            pounce(){
+                this.tiredness+=5;
+                this.health+=20;
+                document.writeln(this.Name + " pounces towards the crowd!");
+            }
+        }
+        class Human extends Animal {
+            constructor(name) {
+                super(name, 100, 0, 20, 100000);
+            }
+
+            looseHealth() {
+                this.health -= .5;
+                if (this.health <= 0) {
+                    this.health = 0;
+                }
+            }
+
+            gainTiredness() {
+                this.tiredness += .2;
+                if (this.tiredness >= 100) {
+                    this.tiredness = 100;
+                }
+            }
+
+            complain() {
+                this.tiredness += 5;
+                this.profit += 20;
+                document.writeln(this.Name + " complains about the audience.");
+            }
+        }
+
+        var human = new Human ("Elvis");
+            human.complain();
+
+
+        var tiger = new Tiger ("Tony");
+            tiger.pounce();
+
+        function purchaseLion() {
+            lions.push(new Lion("Alex"));
+        }
+
+        function purchaseBear() {
+            bears.push(new Bear("Yogi"));
+        }
+        function purchaseDog() {
+            dogs.push(new Dog("Lassie"));
+        }
+        function purchaseTiger() {
+            tigers.push(new Tiger("Tony"));
+        }
+        function purchaseHuman(){
+            humans.push(new Human("Elvis"));
+        }
+
+
+
+
+
+
+
+
+        // Modifies any stats that automatically change every few seconds.
+        //    (For example, health decreases every few seconds so the play needs to occasionally exercise their Virtual Pet)
+        function changesOverTime()
+        {
+            var i = 0;
+            for (i = 0; i < lions.length; i++){
+                lions[i].looseHealth();
+                lions[i].gainTiredness();
+                lions[i].addProfit();
+            }
+
+            var i = 0;
+            for (i = 0; i < tigers.length; i++){
+                tigers[i].looseHealth();
+                tigers[i].gainTiredness();
+                tigers[i].addProfit();
+            }
+
+            var i = 0;
+            for (i = 0; i < bears.length; i++) {
+                bears[i].looseHealth();
+                bears[i].gainTiredness();
+                bears[i].addProfit();
+            }
+
+            var i = 0;
+            for (i = 0; i < dogs.length; i++) {
+                dogs[i].looseHealth();
+                dogs[i].gainTiredness();
+                dogs[i].addProfit();
+            }
+            var i = 0;
+            for (i = 0; i < humans.length; i++){
+                humans[i].looseHealth();
+                humans[i].gainTiredness();
+                humans[i].addProfit();
+
+
+
+
+        // Displays a Title to the screen for your Virtual Pet game
+        function displayTitle()
+        {
+            //created a title (or tried too)
+            //never found out how to get the title to work...damn...
+
+        }
+
+
+        // Displays the current pet stats to the screen.
+        function displayPetStats()
+        {
+            /*document.write("<h2>" + Name + " Status: " + petStatus + "</h2>");
+            document.write("<p>Health = " + currentHealth + "&nbsp;&nbsp;&nbsp;Max Health = " + maxHealth + "</p>");
+            document.write("<p>Sleep = " + meSleepy + "&nbsp;&nbsp;&nbsp; Sleep = " + maxSleep + "</p>");
+            document.write("<p>Feed = " + feedMe + "&nbsp;&nbsp;&nbsp;Fed Properly = " + maxFeed + "</p>");*/
+            //added all the necessary buttons
+            //what else does a dog do!!!
+
+            var i = 0;
+            for (i = 0; i < lions.length; i++) {
+                document.write(lions[i].roar() + "<br>");
+                document.write("Name: " + lions[i].getName()+"<br>");
+                document.write("Name: " + lions[i].gainTiredness()+"<br>");
+                document.write("Name: " + lions[i].looseHealth()+"<br>");
+                //document.write("Name: " + lions[i].getName() + "<br>");
+                //^for each property of the lion
+            }
+            var i = 0;
+            for (i = 0; i <bears.length; i++) {
+                document.write(bears[i].roar() + "<br>");
+                document.write("Name: " + bears[i].getName() + "<br>");
+                document.write("Name: " + bears[i].gainTiredness() + "<br>");
+                document.write("Name: " + bears[i].looseHealth() + "<br>");
+            }
+            var i = 0;
+            for (i = 0; i < dogs.length; i++) {
+                document.write(dogs[i].roar() + "<br>");
+                document.write("Name: " + dogs[i].getName() + "<br>");
+                document.write("Name: " + dogs[i].gainTiredness() + "<br>");
+                document.write("Name: " + dogs[i].looseHealth() + "<br>");
+            }
+
+                var i = 0;
+                for (i = 0; i < tigers.length; i++) {
+                    document.write(dogs[i].roar() + "<br>");
+                    document.write("Name: " + tigers[i].getName() + "<br>");
+                    document.write("Name: " + tigers[i].gainTiredness() + "<br>");
+                    document.write("Name: " + tigers[i].looseHealth() + "<br>");
+                }
+            var i = 0;
+            for (i = 0; i < humans.length; i++) {
+                document.write(humans[i].roar() + "<br>");
+                document.write("Name: " + humans[i].getName() + "<br>");
+                document.write("Name: " + humans[i].gainTiredness() + "<br>");
+                document.write("Name: " + humans[i].looseHealth() + "<br>");
+            }
+
+
+                document.close();
+        }
+
+
+        // Displays the buttons to the screen enabling the user to interact with their virtual pet.
+        function displayUserOptions()
+        {
+            if(petStatus != "Dead")
+            {
+                document.write("<button onclick='purchaseLion()'>Buy A Lion</button>");
+                document.write("<button onclick='purchaseBear()'>Buy A Bear</button>");
+                document.write("<button onclick='purchaseDog()'>Buy A Dog</button>");
+                document.write("<button onclick='purchaseTiger()'>Buy A Tiger</button>");
+                document.write("<button onclick='purchaseHuman()'>Buy A Human</button>");
+
+            }
+        }
+
+
+        // Calls all the functions that display information to the screen.
+        function updateDisplay()
+        {
+            displayTitle();
+            displayUserOptions();
+            displayPetStats();
+
+        }
+
+
+        // This function executes the game and manages the passing of time.
+        function gameLoop(timestamp)
+        {
+            if(timestamp > last_iteration + time_interval)
+            {
+                last_iteration = timestamp;
+
+                changesOverTime();
+                //checkHealth();
+                //makePayments();
+
+                // TODO: Check other Virtual Pet stats and update the petStatus accordingly
+
+
+
+
+                // After all stats updates are done, update/recreate the display
+                updateDisplay();
+            }
+
+
+
+            // Life continues unless the Virtual Pet is dead (health <= 0)
+            if(petStatus != "Dead")
+            {
+                // Executes the gameLoop function once again.
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        var time_interval = 5000;
+        var last_iteration = 0;
+    </script>
+</head>
+
+<body>
+<h1>Ripoff Zoo Tycoon</h1>
+<!-- Initiate the gameLoop for the first time.-->
+<button onclick='gameLoop()'>Bring the Zoo to Life!</button>
+</body>
+</html>
